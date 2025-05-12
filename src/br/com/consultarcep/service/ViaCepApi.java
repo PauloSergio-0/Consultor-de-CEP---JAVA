@@ -1,10 +1,12 @@
 package br.com.consultarcep.service;
 
+import br.com.consultarcep.model.Endereco;
 import br.com.consultarcep.model.ViaCepJson;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URI;
@@ -37,7 +39,8 @@ public class ViaCepApi {
 
             ViaCepJson cepApi = gson.fromJson(json, ViaCepJson.class);
 
-        System.out.println("Esse é o endereco retornado: "+ cepApi);
+        System.out.println("Esse é o endereco retornado salvo! "+ cepApi);
+        savarArquivo(new Endereco(cepApi), gson);
 
     }
 
@@ -48,7 +51,7 @@ public class ViaCepApi {
 
         while (true){
 
-            System.out.println("Informe umn cep: ");
+            System.out.println("Informe um cep: ");
             cep = scanner.nextLine();
 
             if( cep.length() == 8 && cep.matches("\\d+") ){
@@ -63,6 +66,10 @@ public class ViaCepApi {
         return cep;
     }
 
-
+    private void savarArquivo(Endereco endereco, Gson gson) throws IOException {
+        FileWriter escrita = new FileWriter("Cep.json");
+        escrita.write(gson.toJson(endereco));
+        escrita.close();
+    }
 
 }
